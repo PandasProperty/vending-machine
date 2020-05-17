@@ -1,0 +1,47 @@
+.user-change {
+    position: fixed;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    background-color: #cccccc61;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &__container {
+        height: 400px;
+        width: 400px;
+        font-size: 14px;
+        background-color: white; 
+        cursor: pointer;
+        border-radius: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    &__label {
+        font-size: 12px;
+        margin-bottom: 20px;
+    }
+
+    &__description {
+        display: flex;
+        align-items: center;
+    }
+
+    &__coin {
+        margin-left: 15px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+
+        label {
+            margin-top: 5px;
+        }
+    }
+}

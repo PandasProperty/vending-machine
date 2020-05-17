@@ -1,0 +1,32 @@
+.item {
+    height: 100px;
+    width: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #ccc;
+    
+    &__key {
+        margin-top: 15px;
+        margin-bottom: 5px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    &__tags {
+        margin-top: 5px;
+        font-size: 10px;;
+        display: flex;
+        width: 100%;
+        justify-content: center;
+    }
+
+    &__info {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin: 5px 10px;
+    }
+}

@@ -1,0 +1,33 @@
+.keypad {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #ccc;
+
+    &__row {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    &__key {
+        border: 1px solid #ccc;
+        cursor: pointer;
+        width: 60px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &--enter {
+            border: 1px solid green;
+            background-color: #00800052;
+        }
+
+        &--cancel {
+            border: 1px solid red; 
+            background-color: #ff00005c;
+        }
+    }
+}
