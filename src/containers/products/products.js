@@ -4,13 +4,14 @@ import bemHelper from 'react-bem-helper';
 import { map, keys, chunk } from 'lodash';
 import Item from '../../components/item';
 import { VENDING_MACHINE_CONFIG } from '../../utils/constants';
+import { productsSelector } from '../../redux/vending-machine-selectors';
 
 require('./products.scss');
 
 const bem = bemHelper('products');
 
 const Products = () => {
-    const products = useSelector(state => state.vendingMachine.products);
+    const products = useSelector(productsSelector);
     const productKeyRows = chunk(keys(products), VENDING_MACHINE_CONFIG.COLUMNS);
 
     return (

@@ -1,76 +1,50 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import bemHelper from 'react-bem-helper';
 import Keypad from '../../components/keypad';
 import Display from '../../components/display';
 import Error from '../../components/error';
-import { enterInputAction, cancelInputAction } from '../../redux/vending-machine';
+import { actionPressKeypad, actionCancelOperation, actionSelectProduct } from '../../redux/vending-machine';
 import { VENDING_MACHINE_STATES, VENDING_MACHINE_CURRENCY } from '../../utils/constants';
+import { productsSelector, modeSelector, inputProductSelector, errorMessageSelector } from '../../redux/vending-machine-selectors';
 
 require('./select-product.scss');
 
 const bem = bemHelper('select-product');
 
 const SelectProduct = () => {
-    const products = useSelector(state => state.vendingMachine.products);
-    const vendingMachineState = useSelector(state => state.vendingMachine.state);
-    const selectedProduct = useSelector(state => state.vendingMachine.selectedProduct);
-    
     const dispatch = useDispatch();
+    const products = useSelector(productsSelector);
+    const vendingMachineState = useSelector(modeSelector);
+    const inputProduct = useSelector(inputProductSelector);
+    const errorMessage = useSelector(errorMessageSelector);
 
-    const [input, setInput] = useState(null);
-    const [error, setError] = useState(null);
-
-    useEffect(() => {
-        setInput(null);
-    }, [selectedProduct]);
-    
-    const handleOnPressKey = (value) => setInput(input * 10 + value);
-
-    const handleError = (message) => {
-        setError(message);
-        setInput(null);
-        setTimeout(() => {
-            setError(null);
-        }, 2000);
-    };
-
-    const handleOnPressEnter = () => {
-        if (!products[input]) {
-            handleError('Select a valid product number.');
-            return;
+    const handleOnPressKey = (value) => {
+        if (vendingMachineState !== VENDING_MACHINE_STATES.PAYMENT) {
+            dispatch(actionPressKeypad(value));
         }
-        const selectedProduct = products[input];
-        if (selectedProduct.quantity === 0) {
-            handleError('This product is unavailable.');
-            return;
-        }
-        dispatch(enterInputAction(input));
-    };
+    }
 
-    const handleOnPressCancel = () => {
-        setInput(null);
-        dispatch(cancelInputAction());
-    };
+    const handleOnPressEnter = () =>  dispatch(actionSelectProduct());
+
+    const handleOnPressCancel = () => dispatch(actionCancelOperation());
 
     let displayMessage = '';
     let displayValue = '';
     let displayPrice = false;
+    let selectedProduct;
 
-    switch (vendingMachineState) {
-        case VENDING_MACHINE_STATES.IDLE:
-        case VENDING_MACHINE_STATES.DELIVER:
-            displayMessage = 'Select Product';
-            displayValue = input;
-            break;
-        case VENDING_MACHINE_STATES.PAYMENT:
-            displayMessage = 'Product';
-            displayValue = `${selectedProduct.id} - ${selectedProduct.name}`;
-            displayPrice = true;
-            break;
-        default:
-            break;
+    if (vendingMachineState ===  VENDING_MACHINE_STATES.PAYMENT) {
+        selectedProduct = products[inputProduct];
+        displayMessage = 'Product';
+        displayValue = `${selectedProduct.id} - ${selectedProduct.name}`;
+        displayPrice = true;
+    } else {
+        displayMessage = 'Select Product';
+        displayValue = vendingMachineState ===  VENDING_MACHINE_STATES.IDLE ? '' : inputProduct;
     }
+
+    const error = vendingMachineState === VENDING_MACHINE_STATES.IDLE ? errorMessage : '';
 
     return (
         <div {...bem()}>

@@ -16,7 +16,7 @@ const VendingMachine = () => (
             <SelectProduct />
             <Payment />
             <Output />
-        </div>
+        </div> 
     </div>
 );
 

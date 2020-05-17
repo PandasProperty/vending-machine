@@ -7,8 +7,9 @@ import bemHelper from 'react-bem-helper';
 import UserChange from '../user-change/user-change';
 import Display from '../../components/display';
 import Error from '../../components/error';
-import { inputMoneyAction, getAvailableBalance } from '../../redux/vending-machine';
+import { actionInsertMoney, actionGetAvailableBalance } from '../../redux/vending-machine';
 import { VENDING_MACHINE_CURRENCY, VENDING_MACHINE_MONEY, VENDING_MACHINE_STATES } from'../../utils/constants';
+import { productsSelector, modeSelector, userBalanceSelector, userChangeSelector, machineCapitalSelector, errorMessageSelector } from '../../redux/vending-machine-selectors';
 
 require('./payment.scss');
 
@@ -16,27 +17,21 @@ const bem = bemHelper('payment');
 
 const Payment = () => {
     const dispatch = useDispatch();
-    const selectedProduct = useSelector(state => state.vendingMachine.selectedProduct);
-    const vendingMachineState = useSelector(state => state.vendingMachine.state);
-    const userBalance = useSelector(state => state.vendingMachine.userBalance);
-    const userChange = useSelector(state => state.vendingMachine.userChange);
-    const machineCapital = useSelector(state => state.vendingMachine.machineCapital);
+    const selectedProduct = useSelector(productsSelector);
+    const vendingMachineState = useSelector(modeSelector);
+    const errorMessage = useSelector(errorMessageSelector);
+    const userBalance = useSelector(userBalanceSelector);
+    const userChange = useSelector(userChangeSelector);
     
-    const [error, setError] = useState(null);
     const supportedMoneyLabel = join(map(VENDING_MACHINE_MONEY, money => money.label), ', ');
     const isOverlay = vendingMachineState === VENDING_MACHINE_STATES.PAYMENT && 'overlay';
 
-    const handlePressRest = () => {
-        if (machineCapital) {
-            dispatch(getAvailableBalance());
-        } else {
-            setError(`The machine doesn't have capital availabel`);
-            setTimeout(() => setError(null), 2000)
-        }
-    };
+    const handleGetChange = () => dispatch(actionGetAvailableBalance());
 
-    const handleInputModey = (moneyId) => () => dispatch(inputMoneyAction(moneyId));
+    const handleInputModey = (moneyId) => () => dispatch(actionInsertMoney(moneyId));
 
+    const error = vendingMachineState === VENDING_MACHINE_STATES.PAYMENT ? errorMessage : '';
+    
     return (
         <div {...bem()}>
             <label {...bem('info')}>The vending maching support only {supportedMoneyLabel}.</label>
@@ -46,11 +41,11 @@ const Payment = () => {
                     {...bem('icon', isOverlay)}
                     icon={faRegistered}
                     size='2x'
-                    onClick={handlePressRest}
+                    onClick={handleGetChange}
                 />
                 <div {...bem('info')}>Press the 'R' button for rest.</div>
             </div>
-            { error && <Error error={error} />}
+            <Error error={error} />
             {
                 <div {...bem('wallet', isOverlay)}>
                     {

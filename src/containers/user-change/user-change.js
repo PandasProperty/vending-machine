@@ -4,7 +4,7 @@ import { map } from 'lodash';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCoins } from '@fortawesome/free-solid-svg-icons';
 import bemHelper from 'react-bem-helper';
-import { collectAction } from '../../redux/vending-machine';
+import { actionCollectChange } from '../../redux/vending-machine';
 import { VENDING_MACHINE_CURRENCY } from'../../utils/constants';
 
 require('./user-change.scss');
@@ -16,7 +16,7 @@ const UserChange = () => {
     const userChange = useSelector(state => state.vendingMachine.userChange);
     
     return (
-        <div {...bem()} onClick={() => dispatch(collectAction())}>
+        <div {...bem()} onClick={() => dispatch(actionCollectChange())}>
             <div {...bem('container')}>
                 {
                     userChange.success ? (

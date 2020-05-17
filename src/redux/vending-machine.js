@@ -1,13 +1,22 @@
 import { map, keys } from 'lodash';
 import { createAction, handleActions } from 'redux-actions';
-import { getMachineCapital, generateVendingMachineContent, getMaximumChange, getCoinsDescription } from '../utils/products';
+import { generateVendingMachineContent } from '../utils/products';
 import { VENDING_MACHINE_STATES, VENDING_MACHINE_MONEY } from '../utils/constants';
+import pressKeypadReducer from './press-keypad-reducer';
+import cancelOperationReducer from './cancel-operation-reducer';
+import selectProductReducer from './select-product-reducer';
+import insertMoneyReducer from './insert-money-reducer';
+import pickItemReducer from './pick-item-reducer';
+import getAvailableBalanceReducer from './get-available-balance-reducer';
+import collectChangeReducer from './collect-change-reducer';
 
-export const ACTION_ENTER_INPUT = 'ACTION_ENTER_INPUT';
-export const ACTION_CANCEL_INPUT = 'ACTION_CANCEL_INPUT';
-export const ACTION_INPUT_MONEY = 'ACTION_INPUT_MONEY';
-export const ACTION_COLLECT = 'ACTION_COLLECT';
+export const ACTION_PRESS_KEYPAD = 'ACTION_PRESS_KEYPAD';
+export const ACTION_PRESS_CANCEL = 'ACTION_PRESS_CANCEL';
+export const ACTION_PRESS_ENTER = 'ACTION_PRESS_ENTER';
+export const ACTION_INSERT_MONEY = 'ACTION_INSERT_MONEY';
+export const ACTION_PICK_ITEM = 'ACTION_PICK_ITEM';
 export const ACTION_GET_AVAILABLE_BALANCE = 'ACTION_GET_AVAILABLE_BALANCE';
+export const ACTION_COLLECT_CHANGE = 'ACTION_COLLECT_CHANGE';
 
 const products = generateVendingMachineContent();
 
@@ -18,86 +27,23 @@ const defaultState = {
         ...VENDING_MACHINE_MONEY[coindId]
     })),
     products,
-    state: VENDING_MACHINE_STATES.IDLE,
+    mode: VENDING_MACHINE_STATES.IDLE,
+    inputProduct: 0,
     machineCapital: 0,
-    selectedProduct: null,
     userBalance: 0,
-    userChange: null
+    userChange: null,
+    errorMessage: null
 };
 
-export const enterInputAction = createAction(ACTION_ENTER_INPUT);
-export const cancelInputAction = createAction(ACTION_CANCEL_INPUT);
-export const inputMoneyAction = createAction(ACTION_INPUT_MONEY);
-export const collectAction = createAction(ACTION_COLLECT);
-export const getAvailableBalance = createAction(ACTION_GET_AVAILABLE_BALANCE);
+export const actionPressKeypad = createAction(ACTION_PRESS_KEYPAD);
+export const actionCancelOperation = createAction(ACTION_PRESS_CANCEL);
+export const actionSelectProduct = createAction(ACTION_PRESS_ENTER);
+export const actionInsertMoney = createAction(ACTION_INSERT_MONEY);
+export const actionPickItem = createAction(ACTION_PICK_ITEM);
+export const actionGetAvailableBalance = createAction(ACTION_GET_AVAILABLE_BALANCE);
+export const actionCollectChange = createAction(ACTION_COLLECT_CHANGE);
 
-export const enterInputReducer = (state, { payload }) => {
-    const selectedProduct = state.products[payload];
-    if (state.userBalance >= selectedProduct.price) {
-        return stateAfterDelivery(selectedProduct, state.userBalance, state);
-    }
-    return {
-        ...state,
-        state: VENDING_MACHINE_STATES.PAYMENT,
-        selectedProduct,
-    };
-};
-
-export const cancelInputReducer = (state) => ({
-    ...state,
-    state: VENDING_MACHINE_STATES.IDLE,
-    selectedProduct: null,
-});
-
-export const inputMoneyReducer = (state, { payload: coinId }) => {
-    const { selectedProduct } = state;
-    const userBalance = state.userBalance + VENDING_MACHINE_MONEY[coinId].value;
-    const updatedCoins = map(state.coins, (coin) => 
-        coin.id === coinId ? ({ ...coin, quantity: coin.quantity + 1 }) : coin
-    );
-    let newState;
-    if (userBalance < selectedProduct.price) {
-        newState = {
-            ...state,
-            userBalance,
-            state: VENDING_MACHINE_STATES.PAYMENT
-        };
-    } else {
-        newState = stateAfterDelivery(selectedProduct, userBalance, state);
-    }
-    newState.coins = updatedCoins;
-    newState.machineCapital = VENDING_MACHINE_MONEY[coinId].value; 
-    return newState;
-};
-
-export const collectActionReducer = (state) => ({
-    ...state,
-    state: VENDING_MACHINE_STATES.IDLE,
-    revenueDescription: null,
-    userChange: null
-});
-
-export const getAvailableBalanceReducer = (state) => {
-    const changeObj = getMaximumChange(state.coins, state.userBalance);
-    const remainingCoins = changeObj.coins;
-    const oldCapital = getMachineCapital(state.coins);
-    const remainingCapital = getMachineCapital(remainingCoins);
-    const userChange = oldCapital - remainingCapital;
-
-    return {
-        ...state,
-        userBalance: state.userBalance - userChange,
-        userChange: {
-            value: userChange,
-            split: getCoinsDescription(state.coins, remainingCoins),
-            success: changeObj.nrOfCoins
-        },
-        coins: remainingCoins,
-        machineCapital: remainingCapital
-    };
-};
-
-const stateAfterDelivery = (selectedProduct, userBalance, state) => ({
+export const stateAfterDelivery = (selectedProduct, userBalance, state) => ({
     ...state,
     products: {
         ...state.products,
@@ -106,21 +52,19 @@ const stateAfterDelivery = (selectedProduct, userBalance, state) => ({
             quantity: selectedProduct.quantity - 1
         }
     },
-    selectedProduct: {
-        ...selectedProduct,
-        quantity: selectedProduct.quantity - 1
-    },
     userBalance: userBalance - selectedProduct.price,
-    state: VENDING_MACHINE_STATES.DELIVER
+    mode: VENDING_MACHINE_STATES.DELIVER
 });
 
 const reducer = handleActions(
     {
-        [enterInputAction]: enterInputReducer,
-        [cancelInputAction]: cancelInputReducer,
-        [inputMoneyAction]: inputMoneyReducer,
-        [collectAction]: collectActionReducer,
-        [getAvailableBalance]: getAvailableBalanceReducer
+        [actionPressKeypad]: pressKeypadReducer,
+        [actionCancelOperation]: cancelOperationReducer,
+        [actionSelectProduct]: selectProductReducer,
+        [actionInsertMoney]: insertMoneyReducer,
+        [actionPickItem]: pickItemReducer,
+        [actionGetAvailableBalance]: getAvailableBalanceReducer,
+        [actionCollectChange]: collectChangeReducer
     },
     defaultState
 );
