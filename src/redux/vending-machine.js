@@ -23,7 +23,7 @@ const products = generateVendingMachineContent();
 const defaultState = {
     coins: map(keys(VENDING_MACHINE_MONEY), coindId => ({
         id: coindId,
-        quantity: 10,
+        quantity: 0,
         ...VENDING_MACHINE_MONEY[coindId]
     })),
     products,

@@ -41,7 +41,10 @@ const SelectProduct = () => {
         displayPrice = true;
     } else {
         displayMessage = 'Select Product';
-        displayValue = vendingMachineState ===  VENDING_MACHINE_STATES.IDLE ? '' : inputProduct;
+        displayValue = (
+            vendingMachineState ===  VENDING_MACHINE_STATES.IDLE ||
+            vendingMachineState ===  VENDING_MACHINE_STATES.DELIVER
+        ) ? '' : inputProduct;
     }
 
     const error = vendingMachineState === VENDING_MACHINE_STATES.IDLE ? errorMessage : '';
