@@ -1,5 +1,7 @@
 Task: Build an online vending machine that would simulate a real life one.
 
+![Image description](https://raw.githubusercontent.com/PandasProperty/vending-machine/master/vending-machine.png)
+
 Solution:
 See vending-machine-automate.png for diagram regarding the vending machine state.
 The functionality is based on it.
