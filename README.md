@@ -1,6 +1,7 @@
 Task: Build an online vending machine that would simulate a real life one.
 
 Solution:
+See vending-machine-automate.png for diagram regarding the vending machine state.
 
 Demo: See vending-machine.mov
 
