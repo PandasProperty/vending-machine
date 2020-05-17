@@ -1,0 +1,133 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Vending Machine Select-products componet 1`] = `
+<div
+  className="select-product"
+>
+  <div
+    className="display"
+  >
+    <div
+      className="display__label"
+    >
+      Product
+    </div>
+    <div
+      className="display__value"
+    >
+      1 - Cheese
+    </div>
+  </div>
+  <div
+    className="display"
+  >
+    <div
+      className="display__label"
+    >
+      Price
+    </div>
+    <div
+      className="display__value"
+    >
+      15 RON
+    </div>
+  </div>
+  <div
+    className="error__container"
+  >
+    
+  </div>
+  <div
+    className="keypad"
+  >
+    <div
+      className="keypad__row"
+    >
+      <div
+        className="keypad__key"
+        onClick={[Function]}
+      >
+        1
+      </div>
+      <div
+        className="keypad__key"
+        onClick={[Function]}
+      >
+        2
+      </div>
+      <div
+        className="keypad__key"
+        onClick={[Function]}
+      >
+        3
+      </div>
+    </div>
+    <div
+      className="keypad__row"
+    >
+      <div
+        className="keypad__key"
+        onClick={[Function]}
+      >
+        4
+      </div>
+      <div
+        className="keypad__key"
+        onClick={[Function]}
+      >
+        5
+      </div>
+      <div
+        className="keypad__key"
+        onClick={[Function]}
+      >
+        6
+      </div>
+    </div>
+    <div
+      className="keypad__row"
+    >
+      <div
+        className="keypad__key"
+        onClick={[Function]}
+      >
+        7
+      </div>
+      <div
+        className="keypad__key"
+        onClick={[Function]}
+      >
+        8
+      </div>
+      <div
+        className="keypad__key"
+        onClick={[Function]}
+      >
+        9
+      </div>
+    </div>
+    <div
+      className="keypad__row"
+    >
+      <div
+        className="keypad__key keypad__key--enter"
+        onClick={[Function]}
+      >
+        Enter
+      </div>
+      <div
+        className="keypad__key"
+        onClick={[Function]}
+      >
+        0
+      </div>
+      <div
+        className="keypad__key keypad__key--cancel"
+        onClick={[Function]}
+      >
+        Cancel
+      </div>
+    </div>
+  </div>
+</div>
+`;
