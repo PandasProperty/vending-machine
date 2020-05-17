@@ -6,6 +6,7 @@ export const VENDING_MACHINE_CONFIG = {
 
 export const VENDING_MACHINE_STATES = {
     IDLE: 'IDLE',
+    READING: 'READING',
     PAYMENT: 'PAYMENT',
     DELIVER: 'DELIVER'
 };

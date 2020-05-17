@@ -10,7 +10,6 @@ require('./products.scss');
 const bem = bemHelper('products');
 
 const Products = () => {
-    
     const products = useSelector(state => state.vendingMachine.products);
     const productKeyRows = chunk(keys(products), VENDING_MACHINE_CONFIG.COLUMNS);
 

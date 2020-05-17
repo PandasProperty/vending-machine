@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import bemHelper from 'react-bem-helper';
-import { enterInputAction, cancelInputAction } from '../../redux/vending-machine';
 import Keypad from '../../components/keypad';
 import Display from '../../components/display';
 import Error from '../../components/error';
+import { enterInputAction, cancelInputAction } from '../../redux/vending-machine';
 import { VENDING_MACHINE_STATES, VENDING_MACHINE_CURRENCY } from '../../utils/constants';
 
 require('./select-product.scss');
@@ -24,6 +24,7 @@ const SelectProduct = () => {
     useEffect(() => {
         setInput(null);
     }, [selectedProduct]);
+    
     const handleOnPressKey = (value) => setInput(input * 10 + value);
 
     const handleError = (message) => {
